@@ -4,9 +4,13 @@ import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.jobhunter.domain.University;
+import vn.hoidanit.jobhunter.domain.dto.Meta;
+import vn.hoidanit.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.repository.UniversityRepository;
 
 @Service
@@ -21,8 +25,21 @@ public class UniversityService {
         return this.universityRepository.save(uni);
     }
 
-    public List<University> fetchAllUni() {
-        return this.universityRepository.findAll();
+    public ResultPaginationDTO fetchAllUni(Pageable pageable) {
+        Page<University> pageUni = this.universityRepository.findAll(pageable);
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        Meta mt = new Meta();
+
+        mt.setPage(pageUni.getNumber() + 1);
+        mt.setPageSize(pageUni.getSize());
+
+        mt.setPages(pageUni.getTotalPages());
+        mt.setTotal(pageUni.getTotalElements());
+
+        rs.setMeta(mt);
+        rs.setResult(pageUni.getContent());
+
+        return rs;
     }
 
     public University handleUpdateUni(University reqUni) {
