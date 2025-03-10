@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.jobhunter.domain.University;
+import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.domain.dto.Meta;
 import vn.hoidanit.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.repository.UniversityRepository;
@@ -25,13 +27,13 @@ public class UniversityService {
         return this.universityRepository.save(uni);
     }
 
-    public ResultPaginationDTO fetchAllUni(Pageable pageable) {
-        Page<University> pageUni = this.universityRepository.findAll(pageable);
+    public ResultPaginationDTO fetchAllUni(Specification<University> spec, Pageable pageable) {
+        Page<University> pageUni = this.universityRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Meta mt = new Meta();
 
-        mt.setPage(pageUni.getNumber() + 1);
-        mt.setPageSize(pageUni.getSize());
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
 
         mt.setPages(pageUni.getTotalPages());
         mt.setTotal(pageUni.getTotalElements());
