@@ -13,6 +13,24 @@ public class ResUpdateUserDTO {
     private String name;
     private GenderEnum gender;
     private String address;
+    private String phone;
     private int age;
     private Instant updatedAt;
+    private UniversityUser university;
+    private DepartmentUser department;
+
+    @Getter
+    @Setter
+    public static class UniversityUser {
+        private long id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    public static class DepartmentUser {
+        private long id;
+        private String name;
+    }
+
 }

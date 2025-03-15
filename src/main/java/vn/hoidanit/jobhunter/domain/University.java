@@ -1,14 +1,17 @@
 package vn.hoidanit.jobhunter.domain;
 
 import java.time.Instant;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -34,7 +37,6 @@ public class University {
 
     private String logo;
 
-    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT + 7")
     private Instant createdAt;
 
     private Instant updatedAt;
@@ -42,6 +44,22 @@ public class University {
     private String createdBy;
 
     private String updatedBy;
+
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<User> users;
+
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Department> departments;
+
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Student> students;
+
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Lecture> lectures;
 
     @PrePersist
     public void handleBeforeCreate() {

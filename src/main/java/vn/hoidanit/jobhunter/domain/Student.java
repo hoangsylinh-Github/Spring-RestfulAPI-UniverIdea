@@ -2,10 +2,7 @@ package vn.hoidanit.jobhunter.domain;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,32 +15,29 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
-import vn.hoidanit.jobhunter.util.constant.GenderEnum;
 
 @Entity
-@Table(name = "users")
+@Table(name = "students")
 @Getter
 @Setter
-public class User {
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotBlank(message = "khong duoc de trong")
     private String name;
 
-    @NotBlank(message = "email không được để trống")
+    @NotBlank(message = "khong duoc de trong")
+    private String studentId;
+
+    @NotBlank(message = "khong duoc de trong")
+    private String classroom;
+
+    @NotBlank(message = "khong duoc de trong")
     private String email;
 
-    @NotBlank(message = "password không được để trống")
-    private String password;
-
-    private int age;
-
-    @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
-    private String address;
     private String phone;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
 
     private Instant createdAt;
     private Instant updatedAt;

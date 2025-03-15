@@ -1,5 +1,6 @@
 package vn.hoidanit.jobhunter.service;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,15 +10,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.jobhunter.domain.University;
+import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.repository.UniversityRepository;
+import vn.hoidanit.jobhunter.repository.UserRepository;
 
 @Service
 public class UniversityService {
     private final UniversityRepository universityRepository;
+    private final UserRepository userRepository;
 
-    public UniversityService(UniversityRepository universityRepository) {
+    public UniversityService(UniversityRepository universityRepository, UserRepository userRepository) {
         this.universityRepository = universityRepository;
+        this.userRepository = userRepository;
     }
 
     public University handleCreateUni(University uni) {
@@ -54,6 +59,17 @@ public class UniversityService {
     }
 
     public void handleDeleteUni(long id) {
+        Optional<University> uniOptional = this.universityRepository.findById(id);
+        if (uniOptional.isPresent()) {
+            University uni = uniOptional.get();
+
+            List<User> users = this.userRepository.findByUniversity(uni);
+            this.userRepository.deleteAll(users);
+        }
         this.universityRepository.deleteById(id);
+    }
+
+    public Optional<University> findById(long id) {
+        return this.universityRepository.findById(id);
     }
 }

@@ -15,5 +15,22 @@ public class ResCreateUserDTO {
     private int age;
     private GenderEnum gender;
     private String address;
+    private String phone;
     private Instant createdAt;
+    private UniversityUser university;
+    private DepartmentUser department;
+
+    @Getter
+    @Setter
+    public static class UniversityUser {
+        private long id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    public static class DepartmentUser {
+        private long id;
+        private String name;
+    }
 }
