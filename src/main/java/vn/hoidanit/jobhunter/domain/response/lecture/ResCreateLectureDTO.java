@@ -1,35 +1,32 @@
-package vn.hoidanit.jobhunter.domain.response;
+package vn.hoidanit.jobhunter.domain.response.lecture;
 
 import java.time.Instant;
 
 import lombok.Getter;
+
 import lombok.Setter;
-import vn.hoidanit.jobhunter.util.constant.GenderEnum;
 
 @Getter
 @Setter
-public class ResCreateUserDTO {
+public class ResCreateLectureDTO {
     private long id;
     private String name;
     private String email;
-    private int age;
-    private GenderEnum gender;
-    private String address;
     private String phone;
     private Instant createdAt;
-    private UniversityUser university;
-    private DepartmentUser department;
+    private LectureUni university;
+    private LectureDepart department;
 
     @Getter
     @Setter
-    public static class UniversityUser {
+    public static class LectureUni {
         private long id;
         private String name;
     }
 
     @Getter
     @Setter
-    public static class DepartmentUser {
+    public static class LectureDepart {
         private long id;
         private String name;
     }

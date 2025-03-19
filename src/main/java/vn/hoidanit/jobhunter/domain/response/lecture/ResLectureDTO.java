@@ -1,4 +1,4 @@
-package vn.hoidanit.jobhunter.domain.response;
+package vn.hoidanit.jobhunter.domain.response.lecture;
 
 import java.time.Instant;
 
@@ -11,20 +11,30 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResDepartDTO {
-
+public class ResLectureDTO {
     private long id;
     private String name;
-    private String description;
+    private String email;
+    private String phone;
     private Instant createdAt;
     private Instant updatedAt;
-    private UniDepart university;
+    private LectureUni university;
+    private LectureDepart department;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UniDepart {
+    public static class LectureUni {
+        private long id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LectureDepart {
         private long id;
         private String name;
     }
