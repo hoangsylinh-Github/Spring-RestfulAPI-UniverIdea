@@ -19,6 +19,7 @@ public class ResCreateUserDTO {
     private Instant createdAt;
     private UniversityUser university;
     private DepartmentUser department;
+    private RoleUser role;
 
     @Getter
     @Setter
@@ -30,6 +31,13 @@ public class ResCreateUserDTO {
     @Getter
     @Setter
     public static class DepartmentUser {
+        private long id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    public static class RoleUser {
         private long id;
         private String name;
     }

@@ -18,6 +18,7 @@ public class ResUpdateUserDTO {
     private Instant updatedAt;
     private UniversityUser university;
     private DepartmentUser department;
+    private RoleUser role;
 
     @Getter
     @Setter
@@ -29,6 +30,13 @@ public class ResUpdateUserDTO {
     @Getter
     @Setter
     public static class DepartmentUser {
+        private long id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    public static class RoleUser {
         private long id;
         private String name;
     }

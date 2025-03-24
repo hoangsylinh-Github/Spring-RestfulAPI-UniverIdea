@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     List<User> findByUniversity(University university);
 
     List<User> findByDepartment(Department department);
+
+    List<User> findByIdIn(List<Long> id);
 }

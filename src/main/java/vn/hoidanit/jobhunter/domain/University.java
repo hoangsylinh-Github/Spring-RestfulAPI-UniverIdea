@@ -61,6 +61,10 @@ public class University {
     @JsonIgnore
     List<Lecture> lectures;
 
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Topic> topic;
+
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() == true

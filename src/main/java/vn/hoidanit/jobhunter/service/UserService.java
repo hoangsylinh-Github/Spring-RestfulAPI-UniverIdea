@@ -2,6 +2,7 @@ package vn.hoidanit.jobhunter.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.jobhunter.domain.Department;
+import vn.hoidanit.jobhunter.domain.Role;
 import vn.hoidanit.jobhunter.domain.University;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
@@ -23,12 +25,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UniversityService universityService;
     private final DepartmentService departmentService;
+    private final RoleService roleService;
 
     public UserService(UserRepository userRepository, UniversityService universityService,
-            DepartmentService departmentService) {
+            DepartmentService departmentService, RoleService roleService) {
         this.userRepository = userRepository;
         this.universityService = universityService;
         this.departmentService = departmentService;
+        this.roleService = roleService;
     }
 
     public User handleCreateUser(User user) {
@@ -42,6 +46,12 @@ public class UserService {
         if (user.getDepartment() != null) {
             Optional<Department> departOptional = this.departmentService.findById(user.getDepartment().getId());
             user.setDepartment(departOptional.isPresent() ? departOptional.get() : null);
+        }
+
+        // check role
+        if (user.getRole() != null) {
+            Role r = this.roleService.fetchById(user.getRole().getId());
+            user.setRole(r != null ? r : null);
         }
         return this.userRepository.save(user);
     }
@@ -63,24 +73,32 @@ public class UserService {
         rs.setMeta(mt);
 
         // remove sensitive data
+        // C1
+        // List<ResUserDTO> listUser = pageUser.getContent()
+        // .stream().map(item -> new ResUserDTO(
+        // item.getId(),
+        // item.getName(),
+        // item.getEmail(),
+        // item.getAge(),
+        // item.getGender(),
+        // item.getAddress(),
+        // item.getPhone(),
+        // item.getUpdatedAt(),
+        // item.getCreatedAt(),
+        // new ResUserDTO.UniversityUser(
+        // item.getUniversity() != null ? item.getUniversity().getId() : 0,
+        // item.getUniversity() != null ? item.getUniversity().getName() : null),
+        // new ResUserDTO.DepartmentUser(
+        // item.getDepartment() != null ? item.getDepartment().getId() : 0,
+        // item.getDepartment() != null ? item.getDepartment().getName() : null),
+        // new ResUserDTO.RoleUser(
+        // item.getRole() != null ? item.getRole().getId() : 0,
+        // item.getRole() != null ? item.getRole().getName() : null)))
+        // .collect(Collectors.toList());
+
+        // cach 2
         List<ResUserDTO> listUser = pageUser.getContent()
-                .stream().map(item -> new ResUserDTO(
-                        item.getId(),
-                        item.getName(),
-                        item.getEmail(),
-                        item.getAge(),
-                        item.getGender(),
-                        item.getAddress(),
-                        item.getPhone(),
-                        item.getUpdatedAt(),
-                        item.getCreatedAt(),
-                        new ResUserDTO.UniversityUser(
-                                item.getUniversity() != null ? item.getUniversity().getId() : 0,
-                                item.getUniversity() != null ? item.getUniversity().getName() : null),
-                        new ResUserDTO.DepartmentUser(
-                                item.getDepartment() != null ? item.getDepartment().getId() : 0,
-                                item.getDepartment() != null ? item.getDepartment().getName() : null)))
-                .collect(Collectors.toList());
+                .stream().map(item -> this.convertToResUserDTO(item)).collect(Collectors.toList());
         rs.setResult(listUser);
         return rs;
     }
@@ -116,6 +134,12 @@ public class UserService {
                 currentUser.setDepartment(reqUser.getDepartment());
             }
 
+            // check role
+            if (reqUser.getRole() != null) {
+                Role r = this.roleService.fetchById(reqUser.getRole().getId());
+                currentUser.setRole(r != null ? r : null);
+            }
+
             currentUser = this.userRepository.save(currentUser);
         }
         return currentUser;
@@ -133,6 +157,7 @@ public class UserService {
         ResCreateUserDTO resUser = new ResCreateUserDTO();
         ResCreateUserDTO.UniversityUser uni = new ResCreateUserDTO.UniversityUser();
         ResCreateUserDTO.DepartmentUser depart = new ResCreateUserDTO.DepartmentUser();
+        ResCreateUserDTO.RoleUser role = new ResCreateUserDTO.RoleUser();
 
         resUser.setId(user.getId());
         resUser.setName(user.getName());
@@ -155,6 +180,12 @@ public class UserService {
             resUser.setDepartment(depart);
         }
 
+        if (user.getRole() != null) {
+            role.setId(user.getRole().getId());
+            role.setName(user.getRole().getName());
+            resUser.setRole(role);
+        }
+
         return resUser;
     }
 
@@ -162,6 +193,7 @@ public class UserService {
         ResUserDTO res = new ResUserDTO();
         ResUserDTO.UniversityUser uni = new ResUserDTO.UniversityUser();
         ResUserDTO.DepartmentUser depart = new ResUserDTO.DepartmentUser();
+        ResUserDTO.RoleUser role = new ResUserDTO.RoleUser();
         res.setId(user.getId());
         res.setName(user.getName());
         res.setEmail(user.getEmail());
@@ -183,6 +215,13 @@ public class UserService {
             depart.setName(user.getDepartment().getName());
             res.setDepartment(depart);
         }
+
+        if (user.getRole() != null) {
+            role.setId(user.getRole().getId());
+            role.setName(user.getRole().getName());
+            res.setRole(role);
+        }
+
         return res;
     }
 
@@ -190,6 +229,7 @@ public class UserService {
         ResUpdateUserDTO resUser = new ResUpdateUserDTO();
         ResUpdateUserDTO.UniversityUser uni = new ResUpdateUserDTO.UniversityUser();
         ResUpdateUserDTO.DepartmentUser depart = new ResUpdateUserDTO.DepartmentUser();
+        ResUpdateUserDTO.RoleUser role = new ResUpdateUserDTO.RoleUser();
         if (user.getUniversity() != null) {
             uni.setId(user.getUniversity().getId());
             uni.setName(user.getUniversity().getName());
@@ -200,6 +240,12 @@ public class UserService {
             depart.setId(user.getDepartment().getId());
             depart.setName(user.getDepartment().getName());
             resUser.setDepartment(depart);
+        }
+
+        if (user.getRole() != null) {
+            role.setId(user.getRole().getId());
+            role.setName(user.getRole().getName());
+            resUser.setRole(role);
         }
         resUser.setId(user.getId());
         resUser.setName(user.getName());
@@ -221,5 +267,9 @@ public class UserService {
 
     public User getUserByRefreshTokenAndEmail(String token, String email) {
         return this.userRepository.findByRefreshTokenAndEmail(token, email);
+    }
+
+    public Optional<User> findById(long id) {
+        return this.userRepository.findById(id);
     }
 }

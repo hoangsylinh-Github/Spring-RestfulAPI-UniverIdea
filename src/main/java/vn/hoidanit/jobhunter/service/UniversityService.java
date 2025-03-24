@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.jobhunter.domain.Topic;
 import vn.hoidanit.jobhunter.domain.University;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
@@ -71,5 +72,13 @@ public class UniversityService {
 
     public Optional<University> findById(long id) {
         return this.universityRepository.findById(id);
+    }
+
+    public University fetchUniById(long id) {
+        Optional<University> UniOptional = this.universityRepository.findById(id);
+        if (UniOptional.isPresent()) {
+            return UniOptional.get();
+        }
+        return null;
     }
 }

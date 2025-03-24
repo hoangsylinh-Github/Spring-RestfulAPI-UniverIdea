@@ -5,15 +5,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+import vn.hoidanit.jobhunter.domain.Topic;
 import vn.hoidanit.jobhunter.domain.University;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
+import vn.hoidanit.jobhunter.domain.response.topic.ResTopicDTO;
 import vn.hoidanit.jobhunter.service.UniversityService;
 import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
+import vn.hoidanit.jobhunter.util.error.IdInvalidException;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -51,6 +51,18 @@ public class UniversityController {
             Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK).body(this.universityService.fetchAllUni(spec, pageable));
+    }
+
+    // fetch university by id
+    @GetMapping("/universities/{id}")
+    @ApiMessage("fetch university by id")
+    public ResponseEntity<University> getUniById(@PathVariable("id") long id)
+            throws IdInvalidException {
+        University searchUni = this.universityService.fetchUniById(id);
+        if (searchUni == null) {
+            throw new IdInvalidException("University với id = " + id + " không tồn tại!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(searchUni);
     }
 
     // update uni

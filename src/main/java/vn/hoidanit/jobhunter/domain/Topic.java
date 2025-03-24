@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -24,37 +26,40 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
-import vn.hoidanit.jobhunter.util.constant.GenderEnum;
+import vn.hoidanit.jobhunter.util.constant.StatusEnum;
 
 @Entity
-@Table(name = "users")
+@Table(name = "topics")
 @Getter
 @Setter
-public class User {
+public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotBlank(message = "khong duoc de trong")
     private String name;
 
-    @NotBlank(message = "email không được để trống")
-    private String email;
-
-    @NotBlank(message = "password không được để trống")
-    private String password;
-
-    private int age;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
-    private String address;
-    private String phone;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
-
+    private StatusEnum status;
+    private int year;
+    @NotBlank(message = "khong duoc de trong (upload chua thanh cong)")
+    private String url;
+    // @NotBlank(message = "khong duoc de trong")
+    // private String students;
+    @NotBlank(message = "khong duoc de trong")
+    private String lecture;
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "topic" })
+    @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "topic_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    List<User> user;
 
     @ManyToOne
     @JoinColumn(name = "university_id")
@@ -63,14 +68,6 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
-    private List<Topic> topic;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 
     @PrePersist
     public void handleBeforeCreate() {
