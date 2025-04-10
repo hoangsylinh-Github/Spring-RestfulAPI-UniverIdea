@@ -21,6 +21,7 @@ public class ResTopicDTO {
         this.description = description;
         this.status = status;
         this.year = year;
+        this.reward = reward;
         this.url = url;
         this.lecture = lecture;
         this.createdAt = createdAt;
