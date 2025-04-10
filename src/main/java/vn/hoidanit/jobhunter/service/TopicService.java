@@ -133,6 +133,7 @@ public class TopicService {
         resTopic.setDescription(tempTopic.getDescription());
         resTopic.setStatus(tempTopic.getStatus());
         resTopic.setYear(tempTopic.getYear());
+        resTopic.setReward(tempTopic.getReward());
         resTopic.setUrl(tempTopic.getUrl());
         resTopic.setLecture(tempTopic.getLecture());
         resTopic.setCreatedAt(tempTopic.getCreatedAt());
@@ -151,6 +152,7 @@ public class TopicService {
         resTopic.setDescription(topic.getDescription());
         resTopic.setStatus(topic.getStatus());
         resTopic.setYear(topic.getYear());
+        resTopic.setReward(topic.getReward());
         resTopic.setUrl(topic.getUrl());
         resTopic.setLecture(topic.getLecture());
         resTopic.setCreatedAt(topic.getCreatedAt());
@@ -209,6 +211,7 @@ public class TopicService {
                         item.getDescription(),
                         item.getStatus(),
                         item.getYear(),
+                        item.getReward(),
                         item.getUrl(),
                         item.getLecture(),
                         item.getCreatedAt(),
@@ -305,6 +308,7 @@ public class TopicService {
         topicInDB.setDescription(topic.getDescription());
         topicInDB.setStatus(topic.getStatus());
         topicInDB.setYear(topic.getYear());
+        topicInDB.setReward(topic.getReward());
         topicInDB.setUrl(topic.getUrl());
         topicInDB.setLecture(topic.getLecture());
         topicInDB.setUpdatedAt(topic.getUpdatedAt());
@@ -317,6 +321,7 @@ public class TopicService {
         resTopic.setDescription(currentTopic.getDescription());
         resTopic.setStatus(currentTopic.getStatus());
         resTopic.setYear(currentTopic.getYear());
+        resTopic.setReward(currentTopic.getReward());
         resTopic.setUrl(currentTopic.getUrl());
         resTopic.setLecture(currentTopic.getLecture());
         resTopic.setUpdatedAt(currentTopic.getUpdatedAt());

@@ -13,7 +13,7 @@ import vn.hoidanit.jobhunter.util.constant.StatusEnum;
 @Setter
 @NoArgsConstructor
 public class ResTopicDTO {
-    public ResTopicDTO(long id, String name, String description, StatusEnum status, int year, String url,
+    public ResTopicDTO(long id, String name, String description, StatusEnum status, int year, String reward, String url,
             String lecture, Instant createdAt, Instant updatedAt, List<String> user,
             TopicUni university, TopicDepart department) {
         this.id = id;
@@ -35,6 +35,7 @@ public class ResTopicDTO {
     private String description;
     private StatusEnum status;
     private int year;
+    private String reward;
     private String url;
     private String students;
     private String lecture;

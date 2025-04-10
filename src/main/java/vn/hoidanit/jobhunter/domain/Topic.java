@@ -45,6 +45,7 @@ public class Topic {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     private int year;
+    private String reward;
     @NotBlank(message = "khong duoc de trong (upload chua thanh cong)")
     private String url;
     // @NotBlank(message = "khong duoc de trong")

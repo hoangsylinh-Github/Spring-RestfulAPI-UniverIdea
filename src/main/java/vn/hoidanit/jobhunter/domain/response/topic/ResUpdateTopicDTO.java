@@ -15,6 +15,7 @@ public class ResUpdateTopicDTO {
     private String description;
     private StatusEnum status;
     private int year;
+    private String reward;
     private String url;
     private String students;
     private String lecture;

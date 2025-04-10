@@ -48,10 +48,11 @@ public class SecurityConfiguration {
             CustomAuthenticationEntryPoint customAuthenticationEntryPoint) throws Exception {
 
         String[] whiteList = {
-                "/", "/api/v1/auth/login", "/api/v1/auth/refresh",
+                "/", "/api/v1/auth/login",
+                "/api/v1/auth/register",
+                "/api/v1/auth/refresh",
                 "/storage/**",
                 "/api/v1/auth/topics",
-                "/api/v1/auth/register"
         };
 
         http
@@ -62,6 +63,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(whiteList).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/topics").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/universities").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/departments").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(customAuthenticationEntryPoint))

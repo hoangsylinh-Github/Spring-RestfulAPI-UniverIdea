@@ -15,8 +15,10 @@ public class ResCreateTopicDTO {
     private String description;
     private StatusEnum status;
     private int year;
+    private String reward;
     private String url;
     private String lecture;
+
     private Instant createdAt;
     private String createdBy;
     // private TopicUser user;
