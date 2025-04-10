@@ -58,6 +58,8 @@ public class SecurityConfiguration {
         http
                 .csrf(c -> c.disable())
                 .cors(Customizer.withDefaults())
+                // Chỉ áp dụng OAuth2 cho các endpoint không nằm trong whiteList
+                .securityMatcher("/api/**") // Áp dụng bảo mật cho các route bắt đầu bằng /api/**
                 .authorizeHttpRequests(
                         authz -> authz
                                 .requestMatchers(whiteList).permitAll()
